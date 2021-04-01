@@ -17,7 +17,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
     const productCollection = client.db("shop").collection("products");
-    const orderCollection = client.db("shop").collection("order");
+    const orderCollection = client.db("shop").collection("customer");
 
     app.get('/products', (req, res) => {
         productCollection.find()
@@ -47,12 +47,13 @@ client.connect(err => {
 
     app.post('/addOrder', (req, res) => {
         const newOrder = req.body;
+        console.log('samsul',newOrder);
         orderCollection.insertOne(newOrder)
         .then(result => {
             console.log(result);
         })
 
-        console.log(newOrder);
+        
     })
 
     app.get('/orders', (req, res) => {
