@@ -17,32 +17,32 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
     const productCollection = client.db("shop").collection("products");
-    const orderCollection = client.db("shop").collection("customer");
+    const orderCollection = client.db("shop").collection("order");
 
     app.get('/products', (req, res) => {
         productCollection.find()
-        .toArray((err, items) => {
-            res.send(items)
-        })
+            .toArray((err, items) => {
+                res.send(items)
+            })
     })
 
     app.post('/addProduct', (req, res) => {
         const newProduct = req.body;
-        console.log("add new product" ,newProduct);
+        console.log("add new product", newProduct);
 
         productCollection.insertOne(newProduct)
-        .then(result => {
-            console.log('inserted count', result.insertedCount);
-        })
+            .then(result => {
+                console.log('inserted count', result.insertedCount);
+            })
     })
 
     app.post('/product/:id', (req, res) => {
         console.log(req.params.id);
-        productCollection.find({_id: ObjectId(req.params.id)})
-        .toArray((err, items) => {
-            res.send(items);
-            console.log(items);
-        })
+        productCollection.find({ _id: ObjectId(req.params.id) })
+            .toArray((err, items) => {
+                res.send(items);
+                console.log(items);
+            })
     })
 
     app.post('/addOrder', (req, res) => {
@@ -53,7 +53,7 @@ client.connect(err => {
             console.log(result);
         })
 
-        
+
     })
 
     app.get('/orders', (req, res) => {
@@ -66,10 +66,10 @@ client.connect(err => {
 
     app.delete('/delete/:id', (req, res) => {
         console.log(req.params.id);
-        productCollection.deleteOne({_id: ObjectId(req.params.id)})
-        .then(result => {
-            res.send(result.deletedCount > 0);
-        })
+        productCollection.deleteOne({ _id: ObjectId(req.params.id) })
+            .then(result => {
+                res.send(result.deletedCount > 0);
+            })
     })
 });
 
